@@ -105,13 +105,16 @@ export function isAbsolutePath(value: string): boolean {
   return value.startsWith("/") || isWindowsAbsolutePath(value);
 }
 
-/** The server reads these in place, expanding `~` to its own home folder. */
+/**
+ * The server reads these in place, expanding `~` to its own home folder. Only
+ * `~/` counts: the client's link resolver does not expand `~\`.
+ */
 export function isHostPath(value: string): boolean {
-  return isAbsolutePath(value) || value.startsWith("~/") || value.startsWith("~\\");
+  return isAbsolutePath(value) || value.startsWith("~/");
 }
 
 export function resolveWorkspaceFilePath(path: string, workspaceRoot: string): string {
-  if (isHostPath(path)) return path;
+  if (isAbsolutePath(path) || path.startsWith("~/") || path.startsWith("~\\")) return path;
   const base = workspaceRoot.replace(/[/\\]+$/, "");
   return isWindowsAbsolutePath(workspaceRoot)
     ? `${base}\\${path.replaceAll("/", "\\")}`

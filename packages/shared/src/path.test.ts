@@ -47,7 +47,7 @@ describe("path helpers", () => {
     expect(isHostPath("/home/me/notes.md")).toBe(true);
     expect(isHostPath("C:\\Users\\me\\notes.md")).toBe(true);
     expect(isHostPath("~/.claude/CLAUDE.md")).toBe(true);
-    expect(isHostPath("~\\.claude\\CLAUDE.md")).toBe(true);
+    expect(isHostPath("~\\.claude\\CLAUDE.md")).toBe(false);
     expect(isHostPath("docs/notes.md")).toBe(false);
     expect(isHostPath("~notes.md")).toBe(false);
   });
