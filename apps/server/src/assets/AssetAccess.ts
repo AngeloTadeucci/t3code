@@ -553,7 +553,9 @@ export const issueAssetUrl = Effect.fn("AssetAccess.issueAssetUrl")(function* (i
     }
     case "draft-workspace-file": {
       const draftWorkspaceRoot = input.workspaceRoot ?? input.resource.cwd;
-      const hostPath = expandHomePath(input.resource.path, yield* HostProcess.HomeDirectory);
+      const hostPath = input.resource.path.startsWith("~/")
+        ? expandHomePath(input.resource.path, yield* HostProcess.HomeDirectory)
+        : input.resource.path;
       if (path.isAbsolute(hostPath)) {
         const finalized = yield* finalizeAbsoluteMediaFileAsset({
           requestedPath: hostPath,

@@ -201,12 +201,13 @@ it.layer(layerTest, { excludeTestServices: true })("WorkspaceFileSystemLive", (i
       }),
     );
 
-    it.effect("reads host files in the home folder by ~/ path", () =>
+    it.effect("reads ~/ paths from the server home outside the workspace", () =>
       Effect.gen(function* () {
         const workspaceFileSystem = yield* WorkspaceFileSystem.WorkspaceFileSystem;
         const cwd = yield* makeTempDir;
         const home = yield* makeTempDir;
         yield* writeTextFile(home, ".claude/CLAUDE.md", "# Notes\n");
+        yield* writeTextFile(cwd, "~/.claude/CLAUDE.md", "Workspace decoy\n");
 
         const result = yield* workspaceFileSystem
           .readFile({ cwd, relativePath: "~/.claude/CLAUDE.md" })

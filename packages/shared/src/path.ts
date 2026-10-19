@@ -105,10 +105,7 @@ export function isAbsolutePath(value: string): boolean {
   return value.startsWith("/") || isWindowsAbsolutePath(value);
 }
 
-/**
- * The server reads these in place, expanding `~` to its own home folder. Only
- * `~/` counts: the client's link resolver does not expand `~\`.
- */
+/** Home-relative host paths are expanded by the destination server. */
 export function isHostPath(value: string): boolean {
   return isAbsolutePath(value) || value.startsWith("~/");
 }

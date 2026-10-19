@@ -48,12 +48,13 @@ describe("fileBreadcrumbs", () => {
     ]);
   });
 
-  it("starts home-relative host paths at the home folder", () => {
+  it("builds home-relative breadcrumbs with navigable child folders", () => {
     expect(fileBreadcrumbs("t3code", "~/.claude/CLAUDE.md")).toEqual([
       { label: "~", path: "~", kind: "directory" },
       { label: ".claude", path: "~/.claude", kind: "directory" },
       { label: "CLAUDE.md", path: "~/.claude/CLAUDE.md", kind: "file" },
     ]);
+    expect(isListableHostFolder("~/.claude")).toBe(true);
   });
 });
 
@@ -181,7 +182,6 @@ describe("isListableHostFolder", () => {
     ["/Users", true],
     ["C:\\", true],
     ["\\\\nas\\share", true],
-    ["~/.claude", true],
     // A UNC server is not a directory the server can list.
     ["\\\\nas", false],
     ["apps/web", false],

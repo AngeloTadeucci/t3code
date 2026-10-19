@@ -228,7 +228,9 @@ export const make = Effect.gen(function* () {
     input: ProjectReadFileInput,
   ) {
     const requestedPath = input.relativePath.trim();
-    const hostPath = expandHomePath(requestedPath, yield* HostProcess.HomeDirectory);
+    const hostPath = requestedPath.startsWith("~/")
+      ? expandHomePath(requestedPath, yield* HostProcess.HomeDirectory)
+      : requestedPath;
     if (path.isAbsolute(hostPath)) {
       const realTargetPath = yield* Effect.tryPromise({
         try: () => NodeFSP.realpath(hostPath),
